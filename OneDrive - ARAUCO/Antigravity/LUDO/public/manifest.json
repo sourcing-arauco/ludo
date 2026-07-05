@@ -1,0 +1,24 @@
+{
+  "short_name": "PvZ Ludo",
+  "name": "Plants vs. Zombies Ludo",
+  "description": "Ludo temático de Plants vs. Zombies. Juega localmente contra tus amigos o la CPU.",
+  "id": "/",
+  "scope": "/",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f172a",
+  "theme_color": "#10b981",
+  "icons": [
+    {
+      "src": "/lanzaguisante.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/lanzaguisante.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
