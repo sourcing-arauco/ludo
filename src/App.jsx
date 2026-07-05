@@ -385,6 +385,23 @@ export default function App() {
     }
   }, [gameState, currentPlayer, players, hasRolled, isAiMoving, diceVal]);
 
+  // Human auto-move trigger when all legal moves lead to the same target (using useEffect to avoid React stale closures)
+  useEffect(() => {
+    if (gameState === 'moving' && players[currentPlayer].type === 'human') {
+      const legal = pieces.filter(p => p.color === currentPlayer && isMoveLegal(p, diceVal));
+      if (legal.length > 0) {
+        const uniqueTargets = [...new Set(legal.map(p => p.step === 0 ? 1 : p.step + diceVal))];
+        if (uniqueTargets.length === 1) {
+          const pieceId = legal[0].id;
+          const timer = setTimeout(() => {
+            movePiece(pieceId, diceVal);
+          }, 800);
+          return () => clearTimeout(timer);
+        }
+      }
+    }
+  }, [gameState, activePieces, currentPlayer, players, diceVal, pieces]);
+
   // Roll Dice Action
   const rollDice = () => {
     if (isRolling || hasRolled) return;
@@ -427,17 +444,13 @@ export default function App() {
         setTimeout(() => {
           endTurn(false);
         }, 1200);
-      } else if (legal.length === 1 && players[currentPlayer].type === 'human') {
-        // Only one move possible -> execute automatically after a short delay
-        setActivePieces(legal.map(p => p.id));
-        setGameState('moving');
-        addLog(`Moviendo automáticamente la única pieza disponible de ${playerName}.`);
-        setTimeout(() => {
-          movePiece(legal[0].id, val);
-        }, 1000);
       } else {
         setActivePieces(legal.map(p => p.id));
         setGameState('moving');
+        const uniqueTargets = [...new Set(legal.map(p => p.step === 0 ? 1 : p.step + val))];
+        if (uniqueTargets.length === 1 && players[currentPlayer].type === 'human') {
+          addLog(`Moviendo automáticamente la única pieza disponible de ${playerName}.`);
+        }
       }
     }, 555);
   };
