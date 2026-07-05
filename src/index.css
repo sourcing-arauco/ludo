@@ -124,7 +124,6 @@ h1, h2, h3, .heading-font {
   object-fit: cover;
   display: block;
   pointer-events: none;
-  transform: scale(1.12) !important; /* Scale board up to push corner illustrations outward */
 }
 
 .board-grid-overlay {
